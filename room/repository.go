@@ -1,9 +1,12 @@
 package room
 
-import "gorm.io/gorm"
+import (
+	"booking-room/room"
+	"gorm.io/gorm"
+)
 
 type Repository interface {
-	FindAll() ([]Room, error)
+	FindAllRoom(UserID uint) ([]Room, error)
 	FindAllByUser(UserID uint) ([]Room, error)
 	FindByID(ID int) (Room, error)
 	Create(room Room) (Room, error)
@@ -15,13 +18,23 @@ type repository struct {
 	db *gorm.DB
 }
 
-func NewRepository(db *gorm.DB) *repository {
-	return &repository{
-        db: db, // Assign the provided db to the struct field
-    }
+// FindAllRoom implements Repository.
+func (*repository) FindAllRoom(UserID uint) ([]room.Room, error) {
+	panic("unimplemented")
 }
 
-func (r *repository) FindAll() ([]Room, error) {
+// Update implements Repository.
+func (*repository) Update(room room.Room) (room.Room, error) {
+	panic("unimplemented")
+}
+
+func NewRepository(db *gorm.DB) *repository {
+	return &repository{
+		db: db, // Assign the provided db to the struct field
+	}
+}
+
+func (r *repository) FindAll(UserID uint) ([]Room, error) {
 	var rooms []Room
 	err := r.db.Find(&rooms).Error
 

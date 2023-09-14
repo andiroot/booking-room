@@ -16,10 +16,10 @@ type roomHandler struct {
 	roomService room.Service
 }
 
-func NewBookHandler(service room.Service) *roomHandler {
+func NewRoomHandler(service room.Service) *roomHandler {
 	return &roomHandler{service}
 }
-func (h *roomHandler) PostBooksHandler(c *gin.Context) {
+func (h *roomHandler) PostRoomsHandler(c *gin.Context) {
 	var roomRequest room.RoomRequest
 	err := c.ShouldBindJSON(&roomRequest)
 	if err != nil {
@@ -56,8 +56,11 @@ func (h *roomHandler) PostBooksHandler(c *gin.Context) {
 	})
 }
 
-func (h *roomHandler) GetBooks(c *gin.Context) {
-	rooms, err := h.roomService.FindAll()
+func (h *roomHandler) GetRooms(c *gin.Context) {
+	jwtClaims, _ := c.Get("jwtClaims")
+	claims, _ := jwtClaims.(jwt.MapClaims)
+	userID, _ := claims["sub"].(uint)
+	rooms, err := h.roomService.FindAllRoom(userID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errors": err,
@@ -74,7 +77,7 @@ func (h *roomHandler) GetBooks(c *gin.Context) {
 	})
 }
 
-func (h *roomHandler) UpdateBookHandler(c *gin.Context) {
+func (h *roomHandler) UpdateRoomHandler(c *gin.Context) {
 	var roomRequest room.RoomRequest
 	err := c.ShouldBindJSON(&roomRequest)
 	if err != nil {
@@ -111,7 +114,7 @@ func (h *roomHandler) UpdateBookHandler(c *gin.Context) {
 	})
 }
 
-func (h *roomHandler) GetBook(c *gin.Context) {
+func (h *roomHandler) GetRoom(c *gin.Context) {
 	ID, _ := strconv.Atoi(c.Param("id"))
 	b, err := h.roomService.FindByID(ID)
 	if err != nil {
@@ -125,7 +128,7 @@ func (h *roomHandler) GetBook(c *gin.Context) {
 	})
 }
 
-func (h *roomHandler) DeleteBook(c *gin.Context) {
+func (h *roomHandler) DeleteRoom(c *gin.Context) {
 	ID, _ := strconv.Atoi(c.Param("id"))
 	b, err := h.roomService.Delete(ID)
 	roomResponse := room.ConvertToRoomResponse(b)
