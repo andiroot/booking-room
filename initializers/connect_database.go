@@ -2,16 +2,22 @@ package initializers
 
 import (
 	"fmt"
+	"os"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 func ConnectToDatabase() (*gorm.DB, error){
+    dbUsername := os.Getenv("DB_USERNAME")
+    dbPass := os.Getenv("DB_PASS")
+    dbHost := os.Getenv("DB_HOST")
+    dbName := os.Getenv("DB_NAME")
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%s&loc=%s",
-        "root",
-        "password",
-        "127.0.0.1:3306",
-        "pustakaapi",
+        dbUsername,
+        dbPass,
+        dbHost,
+        dbName,
         "utfmb4",
         "True",
         "Local",
