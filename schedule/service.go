@@ -1,7 +1,8 @@
 package schedule
 
 type Service interface {
-	FindAll(UserID uint) ([]Schedule, error)
+	FindAll() ([]Schedule, error)
+	FindAllByUser(UserID uint) ([]Schedule, error)
 	FindByID(ID int) (Schedule, error)
 	Create(scheduleRequest ScheduleRequest, UserID uint) (Schedule, error)
 	Update(ID int, scheduleRequest ScheduleRequest) (Schedule, error)
@@ -21,6 +22,10 @@ func (s *service) FindAll() ([]Schedule, error) {
 }
 func (s *service) FindByID(ID int) (Schedule, error) {
 	sch, err := s.repository.FindByID(ID)
+	return sch, err
+}
+func (s *service) FindAllByUser(UserID uint) ([]Schedule, error) {
+	sch, err := s.repository.FindAllByUser(UserID)
 	return sch, err
 }
 func (s *service) Create(scheduleRequest ScheduleRequest, UserID uint) (Schedule, error) {

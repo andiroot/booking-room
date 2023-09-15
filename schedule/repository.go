@@ -44,6 +44,11 @@ func (r *repository) Delete(sch Schedule) (Schedule, error) {
 	return sch, err
 }
 
+func (r *repository) Update(book Schedule) (Schedule, error) {
+	err := r.db.Save(&book).Error
+	return book, err
+}
+
 func (r *repository) FindAllByUser(UserID uint) ([]Schedule, error) {
 	var sch []Schedule
 	err := r.db.Where("user_id = ?", UserID).Find(&sch).Error

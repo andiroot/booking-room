@@ -18,7 +18,7 @@ func ConnectToDatabase() (*gorm.DB, error){
         dbPass,
         dbHost,
         dbName,
-        "utfmb4",
+        "utf8mb4",
         "True",
         "Local",
     )
