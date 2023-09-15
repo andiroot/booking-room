@@ -62,8 +62,8 @@ func (h *scheduleHandler) PostScheduleHandler(c *gin.Context) {
 func (h *scheduleHandler) GetSchedules(c *gin.Context) {
 	jwtClaims, _ := c.Get("jwtClaims")
 	claims, _ := jwtClaims.(jwt.MapClaims)
-	userID, _ := claims["sub"].(float64)
-	schedules, err := h.scheduleService.FindAll(uint(userID))
+	userID, _ := claims["sub"].(uint)
+	schedules, err := h.scheduleService.FindAllByUser(userID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
